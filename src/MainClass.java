@@ -75,10 +75,10 @@ public class MainClass extends PApplet {
         ArrayList<PVector> old = new ArrayList<>();
         PVector location;
         float alpha, beta;
-        float speed = 8;
+        float speed = 4;
         float rotation_chance = 0.05F;
-        int size = 8;
-        int tail = 16;
+        int size = 4;
+        int tail = 8;
         int quality = 1;
         boolean dead = false;
 
