@@ -1,5 +1,8 @@
-# particle-explosion-3d
- Взрыв частиц processing
+# processing practicle
+ particle_explosion_3d
  
  <img src=gif/gif1.gif width=400>    <img src=gif/gif2.gif width=400>
+ 
+ static_particle
+ 
  <img src=gif/gif3.gif width=400>    <img src=gif/gif4.gif width=400>
