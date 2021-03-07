@@ -100,9 +100,9 @@ public class MainClass extends PApplet {
                     sin(beta) * speed
             ));
 
-            if (old.get(0).x < 0 || old.get(0).x > width ||
-                    old.get(0).y < 0 || old.get(0).y > height ||
-                    old.get(0).z < -width / 2 || old.get(0).z > width / 2) {
+            if (old.get(0).x <= 0 || old.get(0).x >= width ||
+                    old.get(0).y <= 0 || old.get(0).y >= height ||
+                    old.get(0).z <= -width / 2 || old.get(0).z >= width / 2) {
                 dead = true;
             }
         }
@@ -112,9 +112,9 @@ public class MainClass extends PApplet {
             float colour = map(distance, 0, displaySize / 2, 0, 255);
             stroke(colour, 255, 255, 255 * 0.5F);
             strokeWeight(size);
-            if (location.x > 0 & location.x < width &
-                    location.y > 0 & location.y < height &
-                    location.z > -displaySize / 2 & location.z < displaySize / 2) {
+            if (location.x >= 0 & location.x <= width &
+                    location.y >= 0 & location.y <= height &
+                    location.z >= -displaySize / 2 & location.z <= displaySize / 2) {
                 point(location.x, location.y, location.z);
             }
 
@@ -122,9 +122,9 @@ public class MainClass extends PApplet {
                 for (int i = 0; i < old.size(); i++) {
                     float colour_alpha = map(i, 0, old.size() - 1, 0, 255);
                     stroke(colour, 255, 255, colour_alpha);
-                    if ((old.get(i).x > 0 & old.get(i).x < width) &
-                            (old.get(i).y > 0 & old.get(i).y < height) &
-                            (old.get(i).z > -width / 2 & old.get(i).z < width / 2)) {
+                    if ((old.get(i).x >= 0 & old.get(i).x <= width) &
+                            (old.get(i).y >= 0 & old.get(i).y <= height) &
+                            (old.get(i).z >= -width / 2 & old.get(i).z <= width / 2)) {
                         point(old.get(i).x, old.get(i).y, old.get(i).z);
                     }
 

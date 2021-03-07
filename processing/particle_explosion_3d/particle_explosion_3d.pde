@@ -66,7 +66,6 @@ class particle {
   float rotation_chance = 0.05F;
   int size = 4;
   int tail = 8;
-  int quality = 1;
   boolean dead = false;
 
   particle(float x, float y, float z, float alpha, float beta) {
@@ -88,9 +87,9 @@ class particle {
       sin(beta) * speed
       ));
 
-    if (old.get(0).x < 0 || old.get(0).x > width ||
-      old.get(0).y < 0 || old.get(0).y > height ||
-      old.get(0).z < -width / 2 || old.get(0).z > width / 2) {
+    if (old.get(0).x <= 0 || old.get(0).x >= width ||
+      old.get(0).y <= 0 || old.get(0).y >= height ||
+      old.get(0).z <= -width / 2 || old.get(0).z >= width / 2) {
       dead = true;
     }
   }
@@ -98,29 +97,22 @@ class particle {
   void display() {
     float distance = dist(width / 2, height / 2, 0, location.x, location.y, location.z);
     float colour = map(distance, 0, displaySize / 2, 0, 255);
-    fill(colour, 255, 255, 255 * 0.5F);
-    noStroke();
-    sphereDetail(quality);
-    if (location.x > 0 & location.x < width &
-      location.y > 0 & location.y < height &
-      location.z > -displaySize / 2 & location.z < displaySize / 2) {
-      pushMatrix();
-      translate(location.x, location.y, location.z);
-      sphere(size);
-      popMatrix();
+    stroke(colour, 255, 255, 255 * 0.5F);
+    strokeWeight(size);
+    if (location.x >= 0 & location.x <= width &
+      location.y >= 0 & location.y <= height &
+      location.z >= -displaySize / 2 & location.z <= displaySize / 2) {
+      point(location.x, location.y, location.z);
     }
 
     if (old.size() > 1) {
       for (int i = 0; i < old.size(); i++) {
         float colour_alpha = map(i, 0, old.size() - 1, 0, 255);
-        fill(colour, 255, 255, colour_alpha);
-        if ((old.get(i).x > 0 & old.get(i).x < width) &
-          (old.get(i).y > 0 & old.get(i).y < height) &
-          (old.get(i).z > -width / 2 & old.get(i).z < width / 2)) {
-          pushMatrix();
-          translate(old.get(i).x, old.get(i).y, old.get(i).z);
-          sphere(size);
-          popMatrix();
+        stroke(colour, 255, 255, colour_alpha);
+        if ((old.get(i).x >= 0 & old.get(i).x <= width) &
+          (old.get(i).y >= 0 & old.get(i).y <= height) &
+          (old.get(i).z >= -width / 2 & old.get(i).z <= width / 2)) {
+          point(old.get(i).x, old.get(i).y, old.get(i).z);
         }
       }
     }
