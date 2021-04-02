@@ -1,4 +1,4 @@
-# processing practicle
+# processing practice
  particle_explosion_3d
  
  <img src=gif/gif1.gif width=400>    <img src=gif/gif2.gif width=400>
