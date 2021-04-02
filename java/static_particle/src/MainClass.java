@@ -39,13 +39,13 @@ public class MainClass extends PApplet {
 
     public void setup() {
         hint(DISABLE_DEPTH_TEST);
-        camera = new PeasyCam(this, width / 2F, height / 2F, displaySize / 2F, 1.75 * displaySize);
+        camera = new PeasyCam(this, 0, 0, 0, 1.75 * displaySize);
         camera.setSuppressRollRotationMode();
         camera.setResetOnDoubleClick(false);
         colorMode(HSB);
         burst(displaySize);
     }
-
+float m=1;
     public void draw() {
         background(0);
 //----------------------------------------------------------------------------------------------------
@@ -56,26 +56,61 @@ public class MainClass extends PApplet {
 //        line(width / 2F, height / 2F, -displaySize / 2F, width / 2F, height / 2F, displaySize / 2F);
         pushMatrix();
         noFill();
-        translate(width / 2F, height / 2F, displaySize/2F);
+        //translate(width / 2F, height / 2F, displaySize/2F);
         stroke(255, 255 * 0.1F);
+        strokeWeight(1);
         box(displaySize);
+
 //        sphere(displaySize/2F); // Выписанная
 //        sphere(displaySize*sqrt(3)/2F); // Описанная
         popMatrix();
 // ----------------------------------------------------------------------------------------------------
+if (key =='5'){
+    m+=0.01;
+}
+        if (key =='6'){
+            m-=0.01;
+        }
 
         for (int i = particle.size() - 1; i >= 0; i--) {
+           particle.get(i).update();
+            if (particle.get(i).dead) {
+                particle.remove(i);
+                continue;
+            }
+
+            pushMatrix();
+            //translate(width/2, height/2, displaySize/2);
+            scale(m,m ,m);
+
             particle.get(i).display();
+            popMatrix();
         }
     }
-
+float a,b;
     void burst(int displaySize) {
         println(getDiv(displaySize));
-        float stp = 32; // warning displaySize % stp == 0
-        for (float i = 0; i <= width; i += stp) {
-            for (float j = 0; j <= height; j += stp) {
-                for (float k = 0; k <= displaySize; k += stp) {
-                    particle.add(new particle(i, j, k));
+        float stp = 100; // warning displaySize % stp == 0
+        for (float x = -width/2; x <= width/2; x += stp) {
+            for (float y = -width/2; y <= height/2; y += stp) {
+                for (float z = -width/2; z <= displaySize/2; z += stp)  {
+                        a = atan2(y , x);
+                        b = atan2(z , x);
+
+//                if (x<width/2) {
+//                    a = a - PI;
+//                    b = b - PI;
+//                }
+                    //a = map(a, 0, PI, -PI, PI);
+                    //b = map(b, 0, PI, -PI, PI);
+                    //println(a, b);
+                    //line();
+//                    PVector q = new PVector(x,y,z);
+//                    float r = q.dist()
+//                    a = PVector.angleBetween(new PVector(x,0), new PVector(0,y));
+//                    b = PVector.angleBetween(new PVector(y,0), new PVector(0,z));
+
+                    particle.add(new particle(x, y, z, a, b));
                 }
             }
         }
@@ -87,11 +122,41 @@ public class MainClass extends PApplet {
         // int size = 8;
         byte option1 = 1;
         byte option2 = 1;
+        int speed = 4;
+        float a, b;
+        boolean dead = false;
 
-        particle(float x, float y, float z) {
+        particle(float x, float y, float z, float a, float b) {
             location = new PVector(x, y, z);
+            this.a = a;
+            this.b = b;
         }
 
+        void update() {
+//            println(
+//                    degrees(atan2(location.y - height / 2F, location.x - width / 2F)),
+//                    degrees(atan2(location.z - displaySize/2, location.x - width / 2F))
+//            );
+
+//            float alpha = degrees(atan2(location.y - height / 2F, location.x - width / 2F));
+//            float beta = degrees(atan2(location.z - displaySize/2, location.x - width / 2F));
+
+
+           // a = atan2( location.y, location.x);
+            //b = atan2(location.z, location.x );
+            location.add(new PVector(
+                    cos(a) * cos(b) * speed,
+                    sin(a) * cos(b) * speed,
+                    sin(b) * speed
+            ));
+
+            if (location.x <= -4*width || location.x >= 4*width ||
+                   location.y <= -4*height ||location.y >= 4*height ||
+                    location.z <= -4*displaySize || location.z >= 4*displaySize) {
+                dead = true;
+            }
+
+        }
         void display() {
             switch (key) {
                 case '1' -> option1 = 1;
@@ -104,8 +169,11 @@ public class MainClass extends PApplet {
             switch (option1) {
                 case (1) -> {
                     float colour = map(distance, 0, displaySize / 2F, 0, 255);
-                    stroke(colour, 255, 255, 255 * 0.5F);
-                    strokeWeight(map(colour, 0, 255, 8, 4));
+//                    stroke(colour, 255, 255, 255 * 0.5F);
+//                    strokeWeight(map(colour, 0, 255, 8, 4));
+                    stroke(255);
+                    strokeWeight(2);
+
 //                    strokeWeight(size);
                 }
                 case (2) -> {
@@ -127,6 +195,7 @@ public class MainClass extends PApplet {
                 case (1) -> point(location.x, location.y, location.z);
                 case (2) -> {
                     if (distance <= displaySize / 2F) {
+
                         point(location.x, location.y, location.z);
                     }
                 }
